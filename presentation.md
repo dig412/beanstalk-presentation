@@ -15,13 +15,25 @@ background-image: url(images/beanstalk.jpg)
 ---
 #Beanstalk
 
-* Job queue
+* Simple job queue
+
+--
+
 * Jobs are blobs
+    * We use JSON
+
+--
+
 * Stored in tubes
-* Workers connect to Beanstalk
-* Beanstalk delivers job
-* Worker marks as done or buried
-* Worker is blocked until job arrives
+
+    * No configuration needed
+
+--
+
+* Binary logging
+
+* Memcache style distribution
+    * Client handles connections to several servers
 
 ---
 .fleft[
@@ -101,14 +113,20 @@ $bean->kick(1);
 ]
 
 ---
-#Uses
-###Detached
-* Image upload
-* Tracking
+#What can we use it for?
+--
 
-###Distributed
+###Expensive Tasks
+* Image Processing
+    * Scaling
+    * Filtering
+    * Uploading
+
+--
+###Distributed Tasks
 * Updates system
 
+--
 ###Scale
 * Email sender
 
@@ -135,11 +153,19 @@ background-image: url(images/supervisord.jpg)
 PDOException with message
 'SQLSTATE[HY000]: General error: 2006 MySQL server has gone away'
 ```
-* Increase `wait.timeout` 
-* mysqli good (`mysqli.reconnect`)
-* PDO bad (pdo obkect, statement object, still throws wanring)
+--
 
-* PHP Notice
+* mysqli is good (`mysqli.reconnect`)
+--
+
+* PDO is bad
+   * One catch block for the PDO object
+   * One catch block for the PDOStatement object
+   * *Still* triggers a warning
+
+```
+Warning: PDO::query() [pdo.query]: MySQL server has gone away
+```
 
 ---
 
