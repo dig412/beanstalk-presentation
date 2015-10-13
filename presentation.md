@@ -138,12 +138,48 @@ background-image: url(images/supervisord.jpg)
 ---
 #Supervisord
 
-* Long running processes
-* Starts specified number
-* Restarts on close
-* Stops on repeated close
-* Captures stdout
-* controlled via supervisorctl
+* Manages long running processes
+
+   * Starts
+   * Restarts
+   * Stops
+   * Logs
+
+--
+
+* You control how many via a config file
+```
+[program:myworker]
+command=php /var/www/worker.php
+numprocs=10
+[program:specialworker]
+command=php /var/www/something-else.php --do-magic
+numprocs=1
+```
+
+---
+#Supervisord Management
+
+Manage everything via `supervisorctl`
+
+```
+dougf@media1$supervisorctl
+mediaworkers:mediaworker_00      RUNNING    pid 25243, uptime 0:40:14
+mediaworkers:mediaworker_01      RUNNING    pid 25242, uptime 0:40:15
+supervisor>
+```
+--
+
+```
+supervisor> stop all
+supervisor> start all
+supervisor> tail mediaworkers:mediaworker_00
+//Oh, the aim of our patrol
+//Is a question rather droll
+//For to march and drill
+//Over field and hill
+//Is a military goal
+```
 
 ---
 
@@ -162,6 +198,8 @@ PDOException with message
    * One catch block for the PDO object
    * One catch block for the PDOStatement object
    * *Still* triggers a warning
+
+--
 
 ```
 Warning: PDO::query() [pdo.query]: MySQL server has gone away
@@ -195,7 +233,8 @@ Broken pipe in Swift/Transport/StreamBuffer.php on line 236
 ```
 
 * PHP Notice - uncatchable
-* Just reconnect each time!
+* "Just reconnect each time!"
+    * Not a great solution...
 
 ---
 class: center, middle
