@@ -187,7 +187,8 @@ Once it's resolved we kick the job, which puts it back in the queue
 #What can we use it for?
 --
 
-###Expensive Tasks
+Expensive Tasks:
+
 * Image Processing
     * Scaling
     * Filtering
@@ -204,8 +205,11 @@ Dont want to block up a browser & apache thread doing this
 
 network / memory breaks - job will be buried, restart
 --
-###Distributed Tasks
+Distributed Tasks:
+
 * Updates system
+  * Notify lots of systems of changes
+  * Update data stored in disparate places
 
 ???
 Lots of different systems that make changes to data
@@ -215,8 +219,11 @@ Lots of systems that are interested in changes
 Job goes in queue, updates search, api, cache
 --
 
-###Scale
+
+Scaling tasks:
+
 * Email sender
+   * Spam everyone even faster!
 
 ???
 Single threaded email sender takes 8 hours for newsletter
