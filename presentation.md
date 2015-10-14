@@ -17,6 +17,20 @@ background-image: url(images/beanstalk.jpg)
 
 * Simple job queue
 
+???
+
+Job queue or work queue
+
+Job is just a blob of data, you can store binary, yaml, strings
+
+we use json as lets you store a job name and parameters, then read it in admin tools
+
+Tubes are separate storage areas
+
+binary logging for recovery
+
+just use several servers and switch between
+
 --
 
 * Jobs are blobs
@@ -46,6 +60,14 @@ $bean = new Pheanstalk('127.0.0.1');
 ```
 ]
 
+???
+
+How does it work - simple example 
+
+Fire up pheanstalk and connect to the server. There is always a tube called "default"
+
+PHP Examples use Pheanstalk library
+
 ---
 .fleft[
 ![](images/tube2.png)
@@ -57,6 +79,14 @@ $bean = new Pheanstalk('127.0.0.1');
 $bean->useTube("phpsw");
 ```
 ]
+
+???
+
+Tubes are created on demand
+
+Here we have connected as someone who will produce jobs
+
+beanstalk has created the tube automatically
 
 ---
 .fleft[
@@ -71,6 +101,11 @@ $bean->put("count the elephpants")
 ```
 ]
 
+???
+Created our job, data is send from our client and stored in the tube
+
+we can disconnect and beanstalk will keep the tube around as it has data
+
 ---
 .fleft[
 ![](images/tube4.png)
@@ -83,6 +118,13 @@ $bean->watch("phpsw");
 $job = $bean->reserve();
 ```
 ]
+
+???
+Connected as a consumer
+
+Reserve call is blocking, so we can wait until something arrives
+
+Reserve gives us the body of the job, so we can read it and process it as we see fit
 
 ---
 .fleft[
@@ -99,6 +141,13 @@ $bean->bury($job);
 ```
 ]
 
+???
+Lets say we can't handle the job - can't parse it or throw an exception
+
+bury puts it in a second queue that won't automatically be sent out
+
+Lets us inspect the job and the code without it running around
+
 ---
 .fleft[
 ![](images/tube6.png)
@@ -112,6 +161,9 @@ $bean->kick(1);
 ```
 ]
 
+???
+Once it's resolved we kick the job, which puts it back in the queue
+
 ---
 #What can we use it for?
 --
@@ -122,19 +174,49 @@ $bean->kick(1);
     * Filtering
     * Uploading
 
+???
+We have multiple sizes needed
+
+run face detection
+
+upload to s3 - takes time
+
+Dont want to block up a browser & apache thread doing this
+
+network / memory breaks - job will be buried, restart
 --
 ###Distributed Tasks
 * Updates system
 
+???
+Lots of different systems that make changes to data
+
+Lots of systems that are interested in changes
+
+Job goes in queue, updates search, api, cache
 --
 ###Scale
 * Email sender
+
+???
+Single threaded email sender takes 8 hours for newsletter
+
+can put a job in for each user, or block of users
+
+Multiple workers mean multithreading
 
 ---
 class: center, middle
 background-image: url(images/supervisord.jpg)
 
 #Supervisord
+
+???
+
+Php on its own makes this hard
+
+dont want to have to start each one in a terminal
+
 ---
 #Supervisord
 
@@ -144,6 +226,16 @@ background-image: url(images/supervisord.jpg)
    * Restarts
    * Stops
    * Logs
+
+???
+
+Starts for us when it starts
+
+restarts when we ask
+
+stops when we ask, or if they keep crashing
+
+logs output for us to view
 
 --
 
@@ -157,6 +249,10 @@ command=php /var/www/something-else.php --do-magic
 numprocs=1
 ```
 
+???
+
+two workers, each with own script and number of workers
+
 ---
 #Supervisord Management
 
@@ -168,6 +264,13 @@ mediaworkers:mediaworker_00      RUNNING    pid 25243, uptime 0:40:14
 mediaworkers:mediaworker_01      RUNNING    pid 25242, uptime 0:40:15
 supervisor>
 ```
+
+???
+
+useful little command line tool
+
+shows us an overview of everything
+
 --
 
 ```
@@ -181,6 +284,12 @@ supervisor> tail mediaworkers:mediaworker_00
 //Is a military goal
 ```
 
+???
+
+how we stop and start them
+
+tail lets us view last few lines of stdout
+
 ---
 
 #Problems - MySQL
@@ -189,6 +298,11 @@ supervisor> tail mediaworkers:mediaworker_00
 PDOException with message
 'SQLSTATE[HY000]: General error: 2006 MySQL server has gone away'
 ```
+
+???
+
+biggest problem is
+
 --
 
 * mysqli is good (`mysqli.reconnect`)
