@@ -128,6 +128,25 @@ Reserve gives us the body of the job, so we can read it and process it as we see
 
 ---
 .fleft[
+![](images/tube7.png)
+]
+
+.fright[
+```php
+$bean = new Pheanstalk('127.0.0.1');
+$bean->watch("phpsw");
+$job = $bean->reserve();
+$bean->delete($job);
+```
+]
+
+???
+Job has been done successfully
+
+delete it so no others pick it up
+
+---
+.fleft[
 ![](images/tube5.png)
 ]
 
