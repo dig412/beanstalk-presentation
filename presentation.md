@@ -399,6 +399,19 @@ Can't be caught easily
 solution from maintainers is to restart often
 
 ---
+#Summary
+
+Beanstalk [http://kr.github.io/beanstalkd/]():
+
+* Easy to set up and understand
+* Helps you scale and break apart complicated tasks
+
+Supervisor [http://supervisord.org/]():
+
+* Essential for managing multiple long-running PHP processes
+* Makes crash handling easy
+
+---
 class: center, middle
 
 #Questions?
