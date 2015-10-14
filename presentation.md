@@ -301,17 +301,34 @@ PDOException with message
 
 ???
 
-biggest problem is
+biggest problem! php libs arent good at long running connections
+
+if youre blocked waiting for a job overnight, connections have failed when the first one arrives in the morning
 
 --
 
 * mysqli is good (`mysqli.reconnect`)
+
+???
+
+mysqli has config setting that reconnets on failure
+
+I havent tried this
+
 --
 
 * PDO is bad
    * One catch block for the PDO object
    * One catch block for the PDOStatement object
    * *Still* triggers a warning
+
+???
+
+throws exception, which is good
+
+but hard to catch and handle properly
+
+have to rebuild statements on error
 
 --
 
@@ -326,6 +343,10 @@ Warning: PDO::query() [pdo.query]: MySQL server has gone away
 ```
 Expected response code 250 but got code "421"
 ```
+
+???
+
+same thing from an SMTP server - you were away too long
 
 --
 
@@ -349,6 +370,14 @@ Broken pipe in Swift/Transport/StreamBuffer.php on line 236
 * PHP Notice - uncatchable
 * "Just reconnect each time!"
     * Not a great solution...
+
+???
+
+Sometimes you get this instead
+
+Can't be caught easily
+
+solution from maintainers is to restart often
 
 ---
 class: center, middle
