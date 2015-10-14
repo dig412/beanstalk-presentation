@@ -214,6 +214,7 @@ Lots of systems that are interested in changes
 
 Job goes in queue, updates search, api, cache
 --
+
 ###Scale
 * Email sender
 
@@ -389,6 +390,8 @@ Broken pipe in Swift/Transport/StreamBuffer.php on line 236
 * PHP Notice - uncatchable
 * "Just reconnect each time!"
     * Not a great solution...
+--
+* If in doubt exit and let supervisord restart you
 
 ???
 
@@ -410,6 +413,11 @@ Supervisor [http://supervisord.org/]():
 
 * Essential for managing multiple long-running PHP processes
 * Makes crash handling easy
+
+PHP
+
+* Lots of libraries are iffy about holding connections open
+* Most issues are solvable with Exceptions
 
 ---
 class: center, middle
